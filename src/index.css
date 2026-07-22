@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-base:        #070A14;   /* near-black indigo canvas */
+  --color-elevated:    #121628;   /* card surface */
+  --color-primary:     #E7ECF5;   /* main text */
+  --color-muted:       #8B93A7;   /* secondary text */
+  --color-accent-from: #7C5CFF;   /* aurora violet */
+  --color-accent-to:   #22D3EE;   /* cyan */
+  --color-warm:        #F5B14C;   /* sun / APOD */
+  --color-visible:     #4ADE80;   /* above horizon */
+  --font-display: "Space Grotesk", "Sora", sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-base);
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  margin: 0;
+}
