@@ -11,7 +11,8 @@ import IssPassCard from '../components/sky/IssPassCard';
 import WeatherCard from '../components/sky/WeatherCard';
 import BortleCard from '../components/sky/BortleCard';
 import TonightItinerary from '../components/sky/TonightItinerary';
-import CommunityFeed from '../components/sky/CommunityFeed';
+import DeepSkyTarget from '../components/sky/DeepSkyTarget';
+import SpaceWeather from '../components/sky/SpaceWeather';
 import { useLocation } from '../context/LocationContext';
 import { visiblePlanets } from '../lib/api';
 import MotionCard from '../components/ui/MotionCard';
@@ -72,7 +73,10 @@ export default function Dashboard() {
         <TonightItinerary location={location} />
       </div>
       
-      <CommunityFeed location={location} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
+        <DeepSkyTarget />
+        <SpaceWeather />
+      </div>
 
       <div className="my-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-4">
