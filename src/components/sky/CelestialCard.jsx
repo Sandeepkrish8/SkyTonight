@@ -4,12 +4,12 @@ import MotionCard from '../ui/MotionCard';
 import AnimatedNumber from '../ui/AnimatedNumber';
 import { motion } from 'framer-motion';
 
-import mercuryImg from '../../assets/download (9).jpg';
+import mercuryImg from '../../assets/mercury.jpg';
 import venusImg from '../../assets/Venus.jpg';
 import marsImg from '../../assets/mars.jpg';
 import jupiterImg from '../../assets/jupiter.jpg';
 import saturnImg from '../../assets/saturn.jpg';
-import uranusImg from '../../assets/download (7).jpg';
+import uranusImg from '../../assets/uranus.jpg';
 import neptuneImg from '../../assets/neptune.jpg';
 import moonImg from '../../assets/moon_satellite.jpg';
 
