@@ -5,6 +5,7 @@ import MotionCard from '../ui/MotionCard';
 import { motion, useReducedMotion } from 'framer-motion';
 import { nasaImages, nasaVideo } from '../../lib/nasaMedia';
 import AnimatedNumber from '../ui/AnimatedNumber';
+import EquipmentBadge from '../ui/EquipmentBadge';
 import IssVideo from '../../assets/Animate_this_photo_of_the_Inte.mp4';
 
 export default function IssPage() {
@@ -95,9 +96,12 @@ export default function IssPage() {
       initial="hidden"
       animate="visible"
     >
-      <div className="flex flex-wrap gap-4 items-center justify-between">
-        <h1 className="font-display text-3xl sm:text-4xl font-bold text-primary">International Space Station</h1>
-        <span className="text-xs font-semibold px-3 py-1 rounded-full border bg-[#22D3EE]/10 text-[#22D3EE] border-[#22D3EE]/20">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-primary mb-2">International Space Station</h1>
+          <EquipmentBadge objectName="iss" />
+        </div>
+        <span className="text-xs font-semibold px-3 py-1 rounded-full border bg-[#22D3EE]/10 text-[#22D3EE] border-[#22D3EE]/20 w-fit">
           Orbit Tracker
         </span>
       </div>

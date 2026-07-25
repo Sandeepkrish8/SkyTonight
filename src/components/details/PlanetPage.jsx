@@ -7,15 +7,25 @@ import { motion, useReducedMotion } from 'framer-motion';
 import CelestialBody3D from './CelestialBody3D';
 import { nasaImages, nasaVideo } from '../../lib/nasaMedia';
 import AnimatedNumber from '../ui/AnimatedNumber';
+import EquipmentBadge from '../ui/EquipmentBadge';
 import VenusImage from '../../assets/Venus.jpg';
 import SaturnImage from '../../assets/saturn.jpg';
 import JupiterImage from '../../assets/jupiter.jpg';
+import UranusImage from '../../assets/download (7).jpg';
+import NeptuneImage from '../../assets/neptune.jpg';
+import MarsImage from '../../assets/mars.jpg';
+import MercuryImage from '../../assets/download (9).jpg';
 import SaturnVideoAsset from '../../assets/make_a_cinmatic_video_about_sa.mp4';
 
+// ... keeping all the existing code intact up to line 125 ...
 const customImages = {
   venus: VenusImage,
   saturn: SaturnImage,
-  jupiter: JupiterImage
+  jupiter: JupiterImage,
+  uranus: UranusImage,
+  neptune: NeptuneImage,
+  mars: MarsImage,
+  mercury: MercuryImage,
 };
 
 const PLANET_FACTS = {
@@ -117,9 +127,12 @@ export default function PlanetPage({ name }) {
       initial="hidden"
       animate="visible"
     >
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-3xl sm:text-4xl font-bold text-primary">{data.name}</h1>
-        <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${badgeClasses}`}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-primary mb-2">{data.name}</h1>
+          <EquipmentBadge objectName={name} />
+        </div>
+        <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${badgeClasses} w-fit`}>
           {badgeText}
         </span>
       </div>

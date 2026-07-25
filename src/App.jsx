@@ -10,6 +10,8 @@ import ObjectDetail from './pages/ObjectDetail';
 import TelescopePage from './pages/TelescopePage';
 import JournalPage from './pages/JournalPage';
 import GalleryPage from './pages/GalleryPage';
+import EventsPage from './pages/EventsPage';
+import IssTrackerPage from './pages/IssTrackerPage';
 import AskTheSky from './components/ai/AskTheSky';
 
 export default function App() {
@@ -29,6 +31,8 @@ export default function App() {
             <Route path="/telescope" element={<TelescopePage />} />
             <Route path="/journal" element={<JournalPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/iss" element={<IssTrackerPage />} />
             <Route path="/object/:name" element={<ObjectDetail />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

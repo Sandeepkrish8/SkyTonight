@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { Share, Check } from 'lucide-react';
 import Container from '../components/layout/Container';
 import ApodHero from '../components/hero/ApodHero';
 import LocationBar from '../components/location/LocationBar';
@@ -8,6 +9,7 @@ import CelestialCard from '../components/sky/CelestialCard';
 import MoonPhaseCard from '../components/sky/MoonPhaseCard';
 import IssPassCard from '../components/sky/IssPassCard';
 import WeatherCard from '../components/sky/WeatherCard';
+import BortleCard from '../components/sky/BortleCard';
 import TonightItinerary from '../components/sky/TonightItinerary';
 import CommunityFeed from '../components/sky/CommunityFeed';
 import { useLocation } from '../context/LocationContext';
@@ -21,6 +23,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const reducedMotion = useReducedMotion();
   const [sunAltDeg, setSunAltDeg] = useState(0);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -48,6 +51,17 @@ export default function Dashboard() {
     };
   }, [location.lat, location.lon]);
 
+  const handleShare = async () => {
+    const text = `I'm exploring the night sky from ${location.label.split(',')[0]} using SkyTonight! 🔭✨\n\nJoin me in finding planets, the Moon, and the ISS tonight!`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
   return (
     <Container className="py-6">
       <ApodHero />
@@ -61,18 +75,28 @@ export default function Dashboard() {
       <CommunityFeed location={location} />
 
       <div className="my-8">
-        <div className="flex flex-wrap items-center justify-between mb-2 gap-2">
-          <h2 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-primary">
-            Visible Above You Tonight
-          </h2>
-          <span className="flex items-center text-xs px-2.5 py-1 rounded-full bg-[#7C5CFF]/10 text-[#7C5CFF] border border-[#7C5CFF]/20 font-medium">
-            <motion.span
-              className="inline-block w-1.5 h-1.5 rounded-full bg-[#7C5CFF] mr-1.5"
-              animate={reducedMotion ? {} : { opacity: [1, 0.4, 1], scale: [1, 1.2, 1] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            />
-            Live Data ({location.label.split(',')[0]})
-          </span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-primary">
+              Visible Above You Tonight
+            </h2>
+            <span className="flex items-center text-xs px-2.5 py-1 rounded-full bg-[#7C5CFF]/10 text-[#7C5CFF] border border-[#7C5CFF]/20 font-medium">
+              <motion.span
+                className="inline-block w-1.5 h-1.5 rounded-full bg-[#7C5CFF] mr-1.5"
+                animate={reducedMotion ? {} : { opacity: [1, 0.4, 1], scale: [1, 1.2, 1] }}
+                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              />
+              Live Data ({location.label.split(',')[0]})
+            </span>
+          </div>
+
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-medium transition-colors w-fit"
+          >
+            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share className="w-4 h-4 text-[#22D3EE]" />}
+            {copied ? 'Copied to Clipboard!' : 'Share My Sky'}
+          </button>
         </div>
         <p className="text-sm text-muted mb-6">
           Live calculated position & astronomical objects calculated for latitude {location.lat.toFixed(2)}°, longitude {location.lon.toFixed(2)}°.
@@ -80,6 +104,7 @@ export default function Dashboard() {
 
         <SkyGrid>
           <WeatherCard />
+          <BortleCard />
           <MoonPhaseCard />
 
           {loading ? (

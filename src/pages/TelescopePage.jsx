@@ -1,12 +1,13 @@
 import React, { useState, Suspense, useMemo, useEffect, useRef } from 'react';
 import { Canvas, useLoader, useFrame } from '@react-three/fiber';
-import { OrbitControls, Stars, Html, Line, DeviceOrientationControls } from '@react-three/drei';
+import { OrbitControls, Stars, Html, Line } from '@react-three/drei';
 import * as THREE from 'three';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ZoomIn, Clock, FastForward, Play, Compass } from 'lucide-react';
+import { ArrowLeft, ZoomIn, Clock, FastForward, Play } from 'lucide-react';
 import Container from '../components/layout/Container';
 import { Equator, Body, Observer } from 'astronomy-engine';
 import StoryPanel from '../components/ui/StoryPanel';
+import { audio } from '../lib/audioUtils';
 
 // Helper to convert Right Ascension (hours) and Declination (degrees) to 3D Cartesian coords
 function sphericalToCartesian(ra, dec, radius = 80) {
@@ -42,6 +43,31 @@ const CONSTELLATION_MARKERS = [
   { id: 'constellation_orion', name: 'Orion', ra: 5.5, dec: 5.0 },
   { id: 'constellation_ursa_major', name: 'Ursa Major', ra: 11.0, dec: 50.0 },
   { id: 'constellation_cassiopeia', name: 'Cassiopeia', ra: 1.0, dec: 60.0 },
+];
+
+// Authentic Constellation Stick Figures (RA, Dec)
+const CONSTELLATION_LINES_DATA = [
+  // Cassiopeia (W shape)
+  [
+    [0.15, 59.1], [0.67, 56.5], [0.94, 60.7], [1.43, 57.3], [1.91, 63.6]
+  ],
+  // Ursa Major (Big Dipper)
+  [
+    [13.79, 49.3], [12.9, 55.9], [12.25, 57.0], [11.89, 53.7], [11.06, 56.4], [11.03, 61.7], [12.25, 57.0]
+  ],
+  // Orion
+  // Belt
+  [
+    [5.3, -0.3], [5.6, -1.2], [5.9, -1.9]
+  ],
+  // Torso
+  [
+    [5.9, 7.4], [5.4, 6.3], [5.2, -8.2], [5.8, -9.6], [5.9, 7.4]
+  ],
+  // Belt to Torso connect
+  [
+    [5.6, -1.2], [5.9, 7.4]
+  ]
 ];
 
 function CelestialSprite({ object, onClick }) {
@@ -86,26 +112,25 @@ function CelestialSprite({ object, onClick }) {
   );
 }
 
-function ConstellationLines({ objects, onObjectClick }) {
-  const points = useMemo(() => {
-    return objects.map(obj => new THREE.Vector3(...obj.position));
-  }, [objects]);
-  
-  if (points.length === 0) return null;
-  const linePoints = [...points, points[0]];
-
+function AuthenticConstellationLines({ onObjectClick }) {
   return (
     <>
-      <Line
-        points={linePoints}
-        color="#22D3EE"
-        lineWidth={1}
-        dashed={true}
-        dashSize={1}
-        gapSize={0.5}
-        transparent
-        opacity={0.3}
-      />
+      {CONSTELLATION_LINES_DATA.map((lineData, index) => {
+        const points = lineData.map(coords => new THREE.Vector3(...sphericalToCartesian(coords[0], coords[1], 80)));
+        return (
+          <Line
+            key={`line-${index}`}
+            points={points}
+            color="#22D3EE"
+            lineWidth={1}
+            dashed={true}
+            dashSize={0.5}
+            gapSize={0.5}
+            transparent
+            opacity={0.4}
+          />
+        );
+      })}
       
       {/* Clickable Mythology Markers */}
       {CONSTELLATION_MARKERS.map((marker) => (
@@ -197,7 +222,7 @@ function Scene({ showConstellations, onObjectClick, simulatedDate }) {
         </Suspense>
       ))}
 
-      {showConstellations && <ConstellationLines objects={dynamicObjects} onObjectClick={onObjectClick} />}
+      {showConstellations && <AuthenticConstellationLines onObjectClick={onObjectClick} />}
     </>
   );
 }
@@ -208,34 +233,6 @@ export default function TelescopePage() {
   const [audioStarted, setAudioStarted] = useState(false);
   const audioRef = useRef(null);
   
-  // AR / Device Orientation State
-  const [arMode, setArMode] = useState(false);
-
-  const toggleAR = async () => {
-    if (!arMode) {
-      if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-        try {
-          const permission = await DeviceOrientationEvent.requestPermission();
-          if (permission === 'granted') {
-            setArMode(true);
-          } else {
-            alert("AR Mode requires device orientation permission.");
-          }
-        } catch (error) {
-          console.error(error);
-          alert("Could not start AR Mode on this device.");
-        }
-      } else if ('DeviceOrientationEvent' in window) {
-        // Non-iOS 13+ devices
-        setArMode(true);
-      } else {
-        alert("Your device doesn't support orientation tracking for AR Mode.");
-      }
-    } else {
-      setArMode(false);
-    }
-  };
-
   // New AI Story State
   const [selectedObjectId, setSelectedObjectId] = useState(null);
 
@@ -250,6 +247,8 @@ export default function TelescopePage() {
   }, [timeOffsetDays]);
 
   const handleObjectClick = (id) => {
+    // Play chime sound
+    audio.playChime();
     // Open the AI Story panel instead of navigating
     setSelectedObjectId(id);
   };
@@ -280,17 +279,13 @@ export default function TelescopePage() {
       {/* 3D Canvas Viewport */}
       <div className="absolute inset-0 cursor-move" onClick={() => !audioStarted && startAudio()}>
         <Canvas camera={{ position: [0, 0, 10], fov: 60 }}>
-          {arMode ? (
-            <DeviceOrientationControls />
-          ) : (
-            <OrbitControls 
-              enablePan={false} 
-              enableZoom={true} 
-              minDistance={2} 
-              maxDistance={100} 
-              makeDefault 
-            />
-          )}
+          <OrbitControls 
+            enablePan={false} 
+            enableZoom={true} 
+            minDistance={2} 
+            maxDistance={100} 
+            makeDefault 
+          />
           <Scene showConstellations={showConstellations} onObjectClick={handleObjectClick} simulatedDate={simulatedDate} />
         </Canvas>
       </div>
@@ -309,15 +304,6 @@ export default function TelescopePage() {
             </Link>
             
             <div className="flex items-center gap-2 md:gap-4">
-              <button
-                onClick={toggleAR}
-                className={`flex items-center gap-1 md:gap-2 px-3 py-2 md:px-4 md:py-2 rounded-xl border backdrop-blur-md text-xs font-medium transition-colors ${arMode ? 'bg-green-500/20 border-green-500/50 text-white' : 'bg-black/40 border-white/5 text-white/70 hover:bg-black/60'}`}
-              >
-                <Compass className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="hidden sm:inline">{arMode ? 'AR ON' : 'AR Mode'}</span>
-                <span className="sm:hidden">AR</span>
-              </button>
-
               <button
                 onClick={startAudio}
                 className={`flex items-center gap-1 md:gap-2 px-3 py-2 md:px-4 md:py-2 rounded-xl border backdrop-blur-md text-xs font-medium transition-colors ${audioStarted ? 'bg-[#22D3EE]/20 border-[#22D3EE]/50 text-white' : 'bg-black/40 border-white/5 text-white/70 hover:bg-black/60'}`}

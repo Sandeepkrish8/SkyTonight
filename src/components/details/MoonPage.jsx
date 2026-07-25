@@ -8,6 +8,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import CelestialBody3D from './CelestialBody3D';
 import { nasaImages, nasaVideo } from '../../lib/nasaMedia';
 import AnimatedNumber from '../ui/AnimatedNumber';
+import EquipmentBadge from '../ui/EquipmentBadge';
 import moonSatelliteImg from '../../assets/moon_satellite.jpg';
 
 export default function MoonPage() {
@@ -102,9 +103,12 @@ export default function MoonPage() {
       initial="hidden"
       animate="visible"
     >
-      <div className="flex flex-wrap gap-4 items-center justify-between">
-        <h1 className="font-display text-3xl sm:text-4xl font-bold text-primary">{data.name}</h1>
-        <span className="text-xs font-semibold px-3 py-1 rounded-full border bg-[#F5B14C]/10 text-[#F5B14C] border-[#F5B14C]/20">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-primary mb-2">{data.name}</h1>
+          <EquipmentBadge objectName="moon" />
+        </div>
+        <span className="text-xs font-semibold px-3 py-1 rounded-full border bg-[#F5B14C]/10 text-[#F5B14C] border-[#F5B14C]/20 w-fit">
           {data.phaseName} ({data.illumination}%)
         </span>
       </div>
