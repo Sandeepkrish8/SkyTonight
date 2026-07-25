@@ -9,7 +9,8 @@ import CelestialBody3D from './CelestialBody3D';
 import { nasaImages, nasaVideo } from '../../lib/nasaMedia';
 import AnimatedNumber from '../ui/AnimatedNumber';
 import EquipmentBadge from '../ui/EquipmentBadge';
-import moonSatelliteImg from '../../assets/moon_satellite.jpg';
+
+const moonSatelliteImg = '/textures/moon.png';
 
 export default function MoonPage() {
   const { location } = useLocation();

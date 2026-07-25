@@ -4,24 +4,15 @@ import MotionCard from '../ui/MotionCard';
 import AnimatedNumber from '../ui/AnimatedNumber';
 import { motion } from 'framer-motion';
 
-import mercuryImg from '../../assets/mercury.jpg';
-import venusImg from '../../assets/Venus.jpg';
-import marsImg from '../../assets/mars.jpg';
-import jupiterImg from '../../assets/jupiter.jpg';
-import saturnImg from '../../assets/saturn.jpg';
-import uranusImg from '../../assets/uranus.jpg';
-import neptuneImg from '../../assets/neptune.jpg';
-import moonImg from '../../assets/moon_satellite.jpg';
-
 const PLANET_IMAGES = {
-  mercury: mercuryImg,
-  venus: venusImg,
-  mars: marsImg,
-  jupiter: jupiterImg,
-  saturn: saturnImg,
-  uranus: uranusImg,
-  neptune: neptuneImg,
-  moon: moonImg,
+  mercury: '/textures/mercury.png',
+  venus: '/textures/venus.png',
+  mars: '/textures/mars.png',
+  jupiter: '/textures/jupiter.jpg',
+  saturn: '/textures/saturn.png',
+  uranus: '/textures/uranus.png',
+  neptune: '/textures/neptune.png',
+  moon: '/textures/moon.png',
 };
 
 export default function CelestialCard({

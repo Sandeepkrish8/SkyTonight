@@ -8,24 +8,17 @@ import CelestialBody3D from './CelestialBody3D';
 import { nasaImages, nasaVideo } from '../../lib/nasaMedia';
 import AnimatedNumber from '../ui/AnimatedNumber';
 import EquipmentBadge from '../ui/EquipmentBadge';
-import VenusImage from '../../assets/Venus.jpg';
-import SaturnImage from '../../assets/saturn.jpg';
-import JupiterImage from '../../assets/jupiter.jpg';
-import UranusImage from '../../assets/uranus.jpg';
-import NeptuneImage from '../../assets/neptune.jpg';
-import MarsImage from '../../assets/mars.jpg';
-import MercuryImage from '../../assets/mercury.jpg';
 import SaturnVideoAsset from '../../assets/make_a_cinmatic_video_about_sa.mp4';
 
 // ... keeping all the existing code intact up to line 125 ...
 const customImages = {
-  venus: VenusImage,
-  saturn: SaturnImage,
-  jupiter: JupiterImage,
-  uranus: UranusImage,
-  neptune: NeptuneImage,
-  mars: MarsImage,
-  mercury: MercuryImage,
+  venus: '/textures/venus.png',
+  saturn: '/textures/saturn.png',
+  jupiter: '/textures/jupiter.jpg',
+  uranus: '/textures/uranus.png',
+  neptune: '/textures/neptune.png',
+  mars: '/textures/mars.png',
+  mercury: '/textures/mercury.png',
 };
 
 const PLANET_FACTS = {

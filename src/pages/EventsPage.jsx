@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import Container from '../components/layout/Container';
 import { motion } from 'framer-motion';
 
-import saturnImg from '../assets/saturn.jpg';
-import jupiterImg from '../assets/jupiter.jpg';
+
 
 const UPCOMING_EVENTS = [
   {
@@ -26,7 +25,7 @@ const UPCOMING_EVENTS = [
     description: 'The ringed planet will be at its closest approach to Earth and its face will be fully illuminated by the Sun. It will be brighter than any other time of the year and will be visible all night long.',
     icon: Star,
     color: 'from-amber-500/20 to-amber-400/5 text-amber-400 border-amber-500/20',
-    image: saturnImg
+    image: '/textures/saturn.png'
   },
   {
     id: 3,
@@ -56,7 +55,7 @@ const UPCOMING_EVENTS = [
     description: 'The giant planet will be at its closest approach to Earth and its face will be fully illuminated by the Sun. A good pair of binoculars should allow you to see Jupiter\'s four largest moons.',
     icon: Star,
     color: 'from-[#7C5CFF]/20 to-[#22D3EE]/5 text-[#22D3EE] border-[#22D3EE]/20',
-    image: jupiterImg
+    image: '/textures/jupiter.jpg'
   },
 ];
 
