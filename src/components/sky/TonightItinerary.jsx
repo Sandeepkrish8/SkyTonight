@@ -1,53 +1,97 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, Star, Map, Sparkles, Loader2 } from 'lucide-react';
+import { Clock, Star, Map, Sparkles, Loader2, Moon } from 'lucide-react';
 import MotionCard from '../ui/MotionCard';
+import * as SunCalc from 'suncalc';
+import { issPass, visiblePlanets } from '../../lib/api';
 
 export default function TonightItinerary({ location }) {
   const [itinerary, setItinerary] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate AI generation of an itinerary based on location
+    let isMounted = true;
     setLoading(true);
-    const timer = setTimeout(() => {
-      const city = location?.label?.split(',')[0] || "your area";
-      const now = new Date();
-      
-      const hour1 = (now.getHours() + 1) % 24;
-      const hour2 = (now.getHours() + 3) % 24;
-      const hour3 = (now.getHours() + 5) % 24;
-      
-      const formatTime = (h) => {
-        const ampm = h >= 12 ? 'PM' : 'AM';
-        const hr = h % 12 || 12;
-        return `${hr}:00 ${ampm}`;
-      };
 
-      setItinerary([
-        {
-          time: formatTime(hour1),
+    async function generateItinerary() {
+      try {
+        const city = location?.label?.split(',')[0] || "your area";
+        const now = new Date();
+        const generatedEvents = [];
+
+        // 1. Golden Hour / Sunset
+        const times = SunCalc.getTimes(now, location.lat, location.lon);
+        const formatTime = (date) => {
+          if (!date || isNaN(date)) return "Unknown";
+          return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        };
+        
+        const sunsetTime = formatTime(times.sunset);
+        generatedEvents.push({
+          time: sunsetTime,
           title: "Golden Hour Glow",
-          description: `The sun will begin setting over ${city}, providing perfect conditions to spot Venus low on the western horizon before it dips out of sight.`,
+          description: `The sun will begin setting over ${city}, providing perfect conditions to spot bright objects low on the western horizon as twilight deepens.`,
           icon: <Star className="w-4 h-4 text-yellow-400" />
-        },
-        {
-          time: formatTime(hour2),
-          title: "ISS Flyover",
-          description: "Look straight up! The International Space Station will make a bright, 4-minute transit across the sky. It will look like a very fast-moving, unblinking star.",
-          icon: <Map className="w-4 h-4 text-[#22D3EE]" />
-        },
-        {
-          time: formatTime(hour3),
-          title: "Deep Sky Viewing",
-          description: "The sky is fully dark now. If you drive 20 minutes away from city lights, the Andromeda Galaxy and Orion Nebula will be perfectly positioned for binocular viewing.",
-          icon: <Sparkles className="w-4 h-4 text-[#7C5CFF]" />
-        }
-      ]);
-      setLoading(false);
-    }, 1500);
+        });
 
-    return () => clearTimeout(timer);
+        // 2. ISS Flyover (Conditional based on real data)
+        const issData = await issPass(location.lat, location.lon);
+        if (issData && issData.pass) {
+          generatedEvents.push({
+            time: issData.pass.start,
+            title: "ISS Flyover",
+            description: `Look up! The International Space Station will make a transit across the sky for ${issData.pass.duration}. It will look like a very fast-moving, unblinking star approaching from the ${issData.pass.direction}.`,
+            icon: <Map className="w-4 h-4 text-[#22D3EE]" />
+          });
+        }
+
+        // 3. Deep Sky or Moon Viewing
+        const darkTime = times.nauticalDusk || new Date(now.getTime() + 2 * 60 * 60 * 1000);
+        
+        // Let's check visible planets for a specific recommendation
+        let deepSkyDesc = "The sky is fully dark now. If you drive away from city lights, the Andromeda Galaxy and Orion Nebula will be positioned for viewing.";
+        let icon = <Sparkles className="w-4 h-4 text-[#7C5CFF]" />;
+        let title = "Deep Sky Viewing";
+        
+        try {
+          const planets = await visiblePlanets(location.lat, location.lon);
+          const jupiter = planets.find(p => p.name === 'Jupiter' && p.aboveHorizon);
+          const venus = planets.find(p => p.name === 'Venus' && p.aboveHorizon);
+          
+          if (jupiter) {
+            deepSkyDesc = `Jupiter is currently visible in ${jupiter.constellation} at an altitude of ${jupiter.altitude}. A great time to pull out the binoculars or telescope!`;
+            title = "Planet Spotting: Jupiter";
+          } else if (venus) {
+            deepSkyDesc = `Venus is currently visible in ${venus.constellation} at an altitude of ${venus.altitude}. A brilliant target for early evening viewing!`;
+            title = "Planet Spotting: Venus";
+          }
+        } catch (err) {
+          // Fallback to deep sky
+        }
+
+        generatedEvents.push({
+          time: formatTime(darkTime),
+          title: title,
+          description: deepSkyDesc,
+          icon: icon
+        });
+
+        // Sort events chronologically (roughly based on strings if needed, but our order is generally Sunset -> ISS -> Dark Sky)
+        // Since ISS passes can happen anytime, we'll just sort them sequentially as generated.
+        
+        if (isMounted) {
+          setItinerary(generatedEvents);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error("Error generating itinerary:", err);
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    generateItinerary();
+
+    return () => { isMounted = false; };
   }, [location]);
 
   return (
