@@ -11,10 +11,10 @@ import EquipmentBadge from '../ui/EquipmentBadge';
 import VenusImage from '../../assets/Venus.jpg';
 import SaturnImage from '../../assets/saturn.jpg';
 import JupiterImage from '../../assets/jupiter.jpg';
-import UranusImage from '../../assets/download (7).jpg';
+import UranusImage from '../../assets/uranus.jpg';
 import NeptuneImage from '../../assets/neptune.jpg';
 import MarsImage from '../../assets/mars.jpg';
-import MercuryImage from '../../assets/download (9).jpg';
+import MercuryImage from '../../assets/mercury.jpg';
 import SaturnVideoAsset from '../../assets/make_a_cinmatic_video_about_sa.mp4';
 
 // ... keeping all the existing code intact up to line 125 ...
