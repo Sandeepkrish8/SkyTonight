@@ -8,8 +8,9 @@ export default function Footer() {
         <div>
           <span className="font-display font-semibold text-primary">SkyTonight</span> — Real-time Ephemeris & Stargazing AI
         </div>
-        <div className="text-xs text-muted/70">
-          Powered by SunCalc, VisiblePlanets API & NASA APOD
+        <div className="flex flex-col items-end gap-1 text-xs text-muted/70">
+          <div>Powered by SunCalc, VisiblePlanets API & NASA APOD</div>
+          <div>Planet & moon textures © Solar System Scope (CC BY 4.0) · Imagery courtesy NASA</div>
         </div>
       </Container>
     </footer>

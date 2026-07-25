@@ -1,16 +1,39 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { moonInfo } from '../../lib/sky';
+import MotionCard from '../ui/MotionCard';
+import AnimatedNumber from '../ui/AnimatedNumber';
+import { motion } from 'framer-motion';
+import CelestialBody3D from '../details/CelestialBody3D';
+export default function MoonPhaseCard() {
+  const info = moonInfo(new Date());
 
-export default function MoonPhaseCard({ phaseName = 'Waxing Gibbous', illumination = 78 }) {
   return (
-    <div className="p-6 rounded-2xl bg-elevated/60 border border-white/10 shadow-lg backdrop-blur-sm">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-display text-lg font-bold text-primary">Moon Phase</h3>
-        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#F5B14C]/10 text-[#F5B14C] border border-[#F5B14C]/20">
-          {illumination}% Illuminated
+    <Link 
+      to="/object/moon" 
+      className="block h-full outline-none focus-visible:ring-2 focus-visible:ring-[#F5B14C] rounded-3xl"
+    >
+      <MotionCard className="h-full cursor-pointer group hover:bg-[#F5B14C]/5 hover:-translate-y-1 transition-all">
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#F5B14C]/10 text-[#F5B14C] border border-[#F5B14C]/20">
+            <AnimatedNumber value={info.illumination} format={(v) => `${Math.round(v)}%`} /> Illum
+          </span>
+          <motion.div layoutId="planet-moon" className="w-10 h-10 rounded-full flex-shrink-0 z-10">
+            <CelestialBody3D name="moon" interactive={false} />
+          </motion.div>
+        </div>
+        <div className="text-2xl font-bold font-display text-[#E7ECF5] mb-2">{info.name}</div>
+        <p className="text-xs text-muted">Real-time astronomical phase calculated live via SunCalc</p>
+      </div>
+
+      <div className="pt-3 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-muted font-medium">
+        <span>Moon Age</span>
+        <span className="text-primary font-semibold">
+          <AnimatedNumber value={info.phase * 29.53} format={(v) => `${v.toFixed(1)} days`} />
         </span>
       </div>
-      <div className="text-2xl font-bold font-display text-[#E7ECF5] mb-2">{phaseName}</div>
-      <p className="text-xs text-muted">Real-time astronomical phase derived via SunCalc</p>
-    </div>
+    </MotionCard>
+    </Link>
   );
 }
