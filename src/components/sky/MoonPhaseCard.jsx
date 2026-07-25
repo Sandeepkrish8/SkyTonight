@@ -46,7 +46,7 @@ export default function MoonPhaseCard() {
       <div className="pt-3 mt-4 border-t border-white/5 flex items-center justify-between text-xs text-muted font-medium">
         <span>Moon Age</span>
         <span className="text-primary font-semibold">
-          <AnimatedNumber value={info.phase * 29.53} format={(v) => `${v.toFixed(1)} days`} />
+          <AnimatedNumber value={moonPhase.phase * 29.53} format={(v) => `${v.toFixed(1)} days`} />
         </span>
       </div>
     </MotionCard>
