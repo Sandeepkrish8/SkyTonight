@@ -8,17 +8,24 @@ import CelestialBody3D from './CelestialBody3D';
 import { nasaImages, nasaVideo } from '../../lib/nasaMedia';
 import AnimatedNumber from '../ui/AnimatedNumber';
 import EquipmentBadge from '../ui/EquipmentBadge';
+import VenusImage from '../../assets/Venus.jpg';
+import SaturnImage from '../../assets/saturn.jpg';
+import JupiterImage from '../../assets/jupiter.jpg';
+import UranusImage from '../../assets/uranus.jpg';
+import NeptuneImage from '../../assets/neptune.jpg';
+import MarsImage from '../../assets/mars.jpg';
+import MercuryImage from '../../assets/mercury.jpg';
 import SaturnVideoAsset from '../../assets/make_a_cinmatic_video_about_sa.mp4';
 
 // ... keeping all the existing code intact up to line 125 ...
 const customImages = {
-  venus: '/textures/venus.png',
-  saturn: '/textures/saturn.png',
-  jupiter: '/textures/jupiter.jpg',
-  uranus: '/textures/uranus.png',
-  neptune: '/textures/neptune.png',
-  mars: '/textures/mars.png',
-  mercury: '/textures/mercury.png',
+  venus: VenusImage,
+  saturn: SaturnImage,
+  jupiter: JupiterImage,
+  uranus: UranusImage,
+  neptune: NeptuneImage,
+  mars: MarsImage,
+  mercury: MercuryImage,
 };
 
 const PLANET_FACTS = {
@@ -131,8 +138,12 @@ export default function PlanetPage({ name }) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div layoutId={`planet-${name.toLowerCase()}`} className="h-[300px] md:h-[400px]">
-          <CelestialBody3D name={name} />
+        <motion.div layoutId={`planet-${name.toLowerCase()}`} className="h-[300px] md:h-[400px] rounded-xl overflow-hidden border border-white/10 bg-black/40">
+          <img 
+            src={customImg} 
+            alt={data.name} 
+            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
+          />
         </motion.div>
         
         <div className="flex flex-col gap-4">
