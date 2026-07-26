@@ -36,6 +36,22 @@ export default function Header() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
               <Link
+                to="/gallery"
+                className="flex items-center space-x-2 px-3 lg:px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs sm:text-sm font-medium border border-white/10 transition-colors"
+              >
+                <Camera className="w-4 h-4 text-pink-400" />
+                <span className="hidden lg:inline">Gallery</span>
+              </Link>
+
+              <Link
+                to="/journal"
+                className="flex items-center space-x-2 px-3 lg:px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs sm:text-sm font-medium border border-white/10 transition-colors"
+              >
+                <Book className="w-4 h-4 text-amber-400" />
+                <span className="hidden lg:inline">Journal</span>
+              </Link>
+
+              <Link
                 to="/events"
                 className="flex items-center space-x-2 px-3 lg:px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs sm:text-sm font-medium border border-white/10 transition-colors"
               >

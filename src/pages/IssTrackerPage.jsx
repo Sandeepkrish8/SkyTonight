@@ -83,12 +83,12 @@ export default function IssTrackerPage() {
     
     const fetchIss = async () => {
       try {
-        const res = await fetch('http://api.open-notify.org/iss-now.json');
+        const res = await fetch('https://api.wheretheiss.at/v1/satellites/25544');
         const data = await res.json();
         if (mounted) {
           setIssData({
-            lat: parseFloat(data.iss_position.latitude),
-            lon: parseFloat(data.iss_position.longitude)
+            lat: parseFloat(data.latitude),
+            lon: parseFloat(data.longitude)
           });
           setLoading(false);
         }
