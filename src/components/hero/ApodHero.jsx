@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Camera, Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { fallbackApod } from '../../lib/fallbackApod';
 
 export default function ApodHero() {
   const [apod, setApod] = useState(null);
@@ -20,7 +21,12 @@ export default function ApodHero() {
           setApod(data);
         }
       } catch (err) {
-        console.error(err);
+        console.warn('NASA API failed, using fallback data for hero:', err);
+        if (mounted) {
+          // Select a random amazing fallback image for the hero
+          const randomFallback = fallbackApod[Math.floor(Math.random() * fallbackApod.length)];
+          setApod(randomFallback);
+        }
       } finally {
         if (mounted) setLoading(false);
       }

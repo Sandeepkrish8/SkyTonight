@@ -3,6 +3,7 @@ import { Camera, Calendar, ArrowLeft, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Container from '../components/layout/Container';
 import { motion } from 'framer-motion';
+import { fallbackApod } from '../lib/fallbackApod';
 
 export default function GalleryPage() {
   const [images, setImages] = useState([]);
@@ -24,14 +25,17 @@ export default function GalleryPage() {
           `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&start_date=${startStr}&end_date=${endStr}`
         );
         
-        if (!response.ok) throw new Error('Failed to fetch from NASA APOD');
+        if (!response.ok) {
+          throw new Error('Rate limit exceeded');
+        }
         
         const data = await response.json();
-        // Reverse so newest is first, and filter out videos if any
         const filtered = data.reverse().filter(item => item.media_type === 'image');
         setImages(filtered);
       } catch (err) {
-        setError(err.message);
+        console.warn('NASA API failed, using fallback data:', err);
+        setImages(fallbackApod);
+        setError(null); // Clear error to show fallback
       } finally {
         setLoading(false);
       }
