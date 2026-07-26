@@ -82,7 +82,9 @@ function SaturnRings() {
 
 export default function CelestialBody3D({ name, interactive = true }) {
   const reducedMotion = useReducedMotion();
-  const filename = `${name.toLowerCase()}.jpg`;
+  const lowerName = name.toLowerCase();
+  const isPng = ['mercury', 'venus', 'mars', 'saturn', 'uranus', 'neptune', 'moon'].includes(lowerName);
+  const filename = `${lowerName}.${isPng ? 'png' : 'jpg'}`;
   
   return (
     <div className={`w-full h-full min-h-[300px] bg-black/40 rounded-2xl overflow-hidden border border-white/10 relative ${interactive ? 'cursor-grab active:cursor-grabbing' : 'pointer-events-none !min-h-0 bg-transparent border-none'}`}>
@@ -91,7 +93,7 @@ export default function CelestialBody3D({ name, interactive = true }) {
         <directionalLight position={[5, 3, 5]} intensity={interactive ? 2.0 : 2.5} />
         <TextureErrorBoundary>
           <Suspense fallback={null}>
-            <SphereMesh name={name.toLowerCase()} textureUrl={`/textures/${filename}`} />
+            <SphereMesh name={lowerName} textureUrl={`/textures/${filename}`} />
           </Suspense>
         </TextureErrorBoundary>
         <OrbitControls 
