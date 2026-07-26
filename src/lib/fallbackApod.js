@@ -7,6 +7,14 @@ import UranusImage from '../assets/uranus.jpg';
 
 export const fallbackApod = [
   {
+    date: '2026-07-25',
+    explanation: 'The Seas of Tranquility and Serenity are calm today. They\'re calm most every day though, since they are actually lunar maria, ancient lava flows filling in large impact basins on the Moon. Also known by Latin names Mare Tranquillitatis (right) and Mare Serenitatis, the smooth dark lunar "seas" are in stark contrast to the bright cratered lunar highlands surrounding them in this telescopic view.',
+    hdurl: '/textures/today_apod.jpg',
+    media_type: 'image',
+    title: 'Tranquility and Serenity',
+    url: '/textures/today_apod.jpg'
+  },
+  {
     date: '2024-04-08',
     explanation: 'Jupiter is the largest planet in our solar system. This breathtaking capture showcases the swirling storms of its atmosphere and the iconic Great Red Spot, a massive storm that has been raging for hundreds of years.',
     hdurl: JupiterImage,
