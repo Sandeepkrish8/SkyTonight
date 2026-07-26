@@ -16,13 +16,14 @@ export default function GalleryPage() {
       try {
         const endDate = new Date();
         const startDate = new Date();
-        startDate.setDate(endDate.getDate() - 15);
+        startDate.setDate(endDate.getDate() - 60);
 
         const startStr = startDate.toISOString().split('T')[0];
         const endStr = endDate.toISOString().split('T')[0];
+        const apiKey = import.meta.env.VITE_NASA_API_KEY || 'DEMO_KEY';
 
         const response = await fetch(
-          `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&start_date=${startStr}&end_date=${endStr}`
+          `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&start_date=${startStr}&end_date=${endStr}`
         );
         
         if (!response.ok) {

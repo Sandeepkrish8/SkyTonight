@@ -13,7 +13,8 @@ export default function ApodHero() {
     
     const fetchApod = async () => {
       try {
-        const res = await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY');
+        const apiKey = import.meta.env.VITE_NASA_API_KEY || 'DEMO_KEY';
+        const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`);
         if (!res.ok) throw new Error('APOD fetch failed');
         const data = await res.json();
         
