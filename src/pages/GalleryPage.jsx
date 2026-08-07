@@ -82,46 +82,47 @@ export default function GalleryPage() {
         )}
 
         {!loading && !error && (
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-6">
             {images.map((img, idx) => (
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                key={img.date} 
-                className="break-inside-avoid relative group rounded-2xl overflow-hidden bg-white/5 border border-white/10"
-              >
-                <img 
-                  src={img.url} 
-                  alt={img.title} 
-                  className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" 
-                  loading="lazy"
-                />
-                
-                {/* Content Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                  <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="font-display font-bold text-lg mb-1 leading-tight">{img.title}</h3>
-                    <div className="flex items-center gap-2 text-xs text-[#22D3EE] font-medium mb-3">
-                      <Calendar className="w-3 h-3" />
-                      {img.date}
+              <div key={img.date} className="break-inside-avoid mb-6">
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="relative group rounded-2xl overflow-hidden bg-white/5 border border-white/10"
+                >
+                  <img 
+                    src={img.url} 
+                    alt={img.title} 
+                    className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" 
+                    loading="lazy"
+                  />
+                  
+                  {/* Content Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                    <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                      <h3 className="font-display font-bold text-lg mb-1 leading-tight">{img.title}</h3>
+                      <div className="flex items-center gap-2 text-xs text-[#22D3EE] font-medium mb-3">
+                        <Calendar className="w-3 h-3" />
+                        {img.date}
+                      </div>
+                      <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">
+                        {img.explanation}
+                      </p>
+                      {img.hdurl && (
+                        <a 
+                          href={img.hdurl} 
+                          target="_blank" 
+                          rel="noreferrer"
+                          className="inline-block mt-4 text-xs font-semibold text-white/80 hover:text-white underline decoration-white/30 underline-offset-4"
+                        >
+                          View High-Res
+                        </a>
+                      )}
                     </div>
-                    <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">
-                      {img.explanation}
-                    </p>
-                    {img.hdurl && (
-                      <a 
-                        href={img.hdurl} 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="inline-block mt-4 text-xs font-semibold text-white/80 hover:text-white underline decoration-white/30 underline-offset-4"
-                      >
-                        View High-Res
-                      </a>
-                    )}
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </div>
             ))}
           </div>
         )}

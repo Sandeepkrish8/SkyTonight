@@ -149,7 +149,7 @@ export default function IssTrackerPage() {
             <div>
               <h2 className="font-display font-bold text-white text-lg">ISS Live Telemetry</h2>
               <p className="text-sm text-muted flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse block" />
                 Tracking Active
               </p>
             </div>

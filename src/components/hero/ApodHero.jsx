@@ -14,9 +14,30 @@ export default function ApodHero() {
     const fetchApod = async () => {
       try {
         const apiKey = import.meta.env.VITE_NASA_API_KEY || 'DEMO_KEY';
-        const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`);
-        if (!res.ok) throw new Error('APOD fetch failed');
-        const data = await res.json();
+        let res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`);
+        
+        if (!res.ok) throw new Error(`APOD fetch failed with status ${res.status}`);
+        
+        let data = await res.json();
+        
+        if (data.media_type === 'video') {
+          // If today's APOD is a video, fallback to yesterday's APOD
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const yesterdayStr = yesterday.toISOString().split('T')[0];
+          
+          const yesterdayRes = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${yesterdayStr}`);
+          if (yesterdayRes.ok) {
+            const yesterdayData = await yesterdayRes.json();
+            if (yesterdayData.media_type === 'image') {
+              data = yesterdayData;
+            } else {
+              throw new Error('Yesterday APOD was also a video');
+            }
+          } else {
+            throw new Error(`Failed to fetch yesterday APOD: ${yesterdayRes.status}`);
+          }
+        }
         
         if (mounted && data.media_type === 'image') {
           setApod(data);

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Share, Check } from 'lucide-react';
 import Container from '../components/layout/Container';
-import ApodHero from '../components/hero/ApodHero';
 import LocationBar from '../components/location/LocationBar';
 import SkyGrid from '../components/sky/SkyGrid';
 import CelestialCard from '../components/sky/CelestialCard';
@@ -65,8 +64,6 @@ export default function Dashboard() {
 
   return (
     <Container className="py-6">
-      <ApodHero />
-
       <LocationBar />
 
       <div className="mt-8">
