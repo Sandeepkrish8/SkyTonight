@@ -91,7 +91,10 @@ export async function geocodeCity(name) {
   try {
     const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(name.trim())}&format=json&limit=5`;
     const res = await fetch(url, {
-      headers: { 'User-Agent': 'SkyTonight/1.0' }
+      headers: { 
+        'User-Agent': 'SkyTonight/1.0',
+        'Accept-Language': 'en-US,en;q=0.9'
+      }
     });
     if (!res.ok) return [];
     const data = await res.json();
@@ -120,7 +123,10 @@ export async function reverseGeocode(lat, lon) {
   try {
     const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
     const res = await fetch(url, {
-      headers: { 'User-Agent': 'SkyTonight/1.0' }
+      headers: { 
+        'User-Agent': 'SkyTonight/1.0',
+        'Accept-Language': 'en-US,en;q=0.9'
+      }
     });
     if (!res.ok) return null;
     const data = await res.json();

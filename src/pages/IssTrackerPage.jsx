@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Navigation, MapPin } from 'lucide-react';
 import Container from '../components/layout/Container';
+import { reverseGeocode } from '../lib/api';
 
 // Convert lat/lon to 3D spherical coordinates (radius = Earth radius in scene)
 function getCartesian(lat, lon, radius = 5) {
@@ -106,6 +107,32 @@ export default function IssTrackerPage() {
     };
   }, []);
 
+  const [country, setCountry] = useState('Locating...');
+  const latestIssData = useRef(issData);
+
+  useEffect(() => {
+    latestIssData.current = issData;
+  }, [issData]);
+
+  useEffect(() => {
+    if (loading) return;
+    
+    const getCountry = async () => {
+      const { lat, lon } = latestIssData.current;
+      if (lat === 0 && lon === 0) return;
+      try {
+        const placeLabel = await reverseGeocode(lat, lon);
+        setCountry(placeLabel || 'Over Ocean');
+      } catch (err) {
+        setCountry('Over Ocean');
+      }
+    };
+    
+    getCountry();
+    const interval = setInterval(getCountry, 10000);
+    return () => clearInterval(interval);
+  }, [loading]);
+
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden selection:bg-[#7C5CFF]/30 text-white">
       {/* Background Glow */}
@@ -167,6 +194,10 @@ export default function IssTrackerPage() {
             <div className="hidden md:block">
               <p className="text-[10px] uppercase tracking-wider text-muted font-bold mb-1">Speed</p>
               <p className="font-mono text-lg text-white">27,580 km/h</p>
+            </div>
+            <div className="hidden sm:block">
+              <p className="text-[10px] uppercase tracking-wider text-muted font-bold mb-1">Above</p>
+              <p className="font-display font-medium text-lg text-white max-w-[150px] truncate" title={country}>{country}</p>
             </div>
           </div>
         </div>
