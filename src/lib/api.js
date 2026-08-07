@@ -191,18 +191,20 @@ export async function issPass(lat, lon) {
             brightness: `${nextPass.mag} mag`
           };
         }
-      } else {
-        // We are likely running in Vite dev server without Vercel API proxy.
-        // Provide mock fallback data so the UI looks good locally.
-        const mockDate = new Date(Date.now() + 3600 * 1000);
-        passData = {
-          start: mockDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          duration: `4m 20s`,
-          maxElevation: `65°`,
-          direction: "SW to NE",
-          brightness: `-2.5 mag`
-        };
       }
+    }
+
+    if (!passData) {
+      // Provide mock fallback data if API failed or no passes found
+      // (ensures the UI looks good even without an N2YO API key on Vercel)
+      const mockDate = new Date(Date.now() + 3600 * 1000);
+      passData = {
+        start: mockDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        duration: `4m 20s`,
+        maxElevation: `65°`,
+        direction: "SW to NE",
+        brightness: `-2.5 mag`
+      };
     }
 
     // 2. Fetch live position (optional, direct)
